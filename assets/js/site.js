@@ -105,7 +105,17 @@
   const fold = $('[data-fold]');
   const scrubs = motion ? $$('[data-scrub]') : [];
   const pars = motion ? $$('[data-par]') : [];
-  if (motion && fold) html.classList.add('pin');
+  // Pin the fold scene only where the screen is tall enough to hold it (not phones in landscape).
+  let pinned = false;
+  const updatePin = () => {
+    const on = motion && !!fold && window.innerHeight >= 560;
+    if (on === pinned) return;
+    pinned = on;
+    html.classList.toggle('pin', on);
+    if (!on && fold) { fold.style.removeProperty('--p'); delete fold.dataset.step; }
+    if (lenis) lenis.resize();
+  };
+  updatePin();
 
   let lastY = window.scrollY;
   let queued = false;
@@ -114,7 +124,7 @@
     const vh = window.innerHeight;
     const y = window.scrollY;
 
-    if (motion && fold) {
+    if (pinned) {
       const r = fold.getBoundingClientRect();
       const p = clamp(-r.top / Math.max(1, r.height - vh), 0, 1);
       fold.style.setProperty('--p', p.toFixed(4));
@@ -141,7 +151,7 @@
   };
   const requestFrame = () => { if (!queued) { queued = true; requestAnimationFrame(frame); } };
   window.addEventListener('scroll', requestFrame, { passive: true });
-  window.addEventListener('resize', requestFrame);
+  window.addEventListener('resize', () => { updatePin(); requestFrame(); });
   frame();
 
   /* ---------- pointer details: magnetic buttons, tilting dieline ---------- */

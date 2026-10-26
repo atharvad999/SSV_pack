@@ -366,7 +366,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .sw-face { grid-column: 2; grid-row: 1; margin: 8px 8px 8px 0; border-radius: 3px; }
 .sw-meta { grid-column: 1; grid-row: 1; display: flex; align-items: baseline; gap: 10px; padding: 14px 0; writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; }
 .sw-meta b { font-size: 15px; font-weight: 680; line-height: 40px; letter-spacing: -.01em; }
-.sw-meta span { font-size: 9.5px; color: var(--mute); }
+.sw-meta span { font-size: 10.5px; color: var(--mute); }
 .fan.is-open .sw { transform: rotate(calc((var(--i) - 4) * 10.5deg)); }
 @media (hover: hover) {
   .fan:hover .sw { transform: rotate(calc((var(--i) - 4) * 10.5deg)); }
@@ -390,7 +390,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .details { display: grid; gap: 22px; margin: 44px 0 20px; }
 .details dt { margin-bottom: 4px; color: rgba(29, 27, 24, .72); }
 .details dd { margin: 0; font-size: 19px; font-weight: 520; }
-.tel { font-size: clamp(28px, 2.8vw, 40px); font-weight: 760; font-stretch: 90%; letter-spacing: -.035em; }
+.tel { display: inline-block; padding: 6px 0; font-size: clamp(28px, 2.8vw, 40px); font-weight: 760; font-stretch: 90%; letter-spacing: -.035em; }
 .docket { position: relative; display: grid; gap: 22px; padding: 44px clamp(22px, 3.5vw, 44px) 32px; border-radius: 4px; background: var(--sheet); box-shadow: 0 50px 80px -50px rgba(40, 26, 8, .6); transform: rotate(.5deg); }
 .docket::before { content: ''; position: absolute; left: 0; right: 0; top: 22px; border-top: 1.5px dashed rgba(29, 27, 24, .25); }
 .docket-head { display: flex; justify-content: space-between; gap: 12px; color: var(--mute); }
@@ -417,6 +417,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 @media (hover: hover) { .foot-mark:hover { color: var(--kraft); -webkit-text-stroke-color: var(--kraft); } }
 .foot-cut { height: 0; margin-top: 28px; border-top: 1.5px dashed var(--red); }
 .foot-meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 28px; margin-top: 24px; color: rgba(243, 238, 228, .72); }
+.foot-meta a, .menu-foot a { display: inline-block; padding: 12px 0; margin: -12px 0; }
 .foot-meta a { color: var(--paper); }
 
 /* ---------- responsive ---------- */
@@ -425,11 +426,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .nav, .head-cta { display: none; }
   .menu-btn { display: block; }
   .hero-grid, .fold-grid, .book-grid, .contact-grid, .sec-head { grid-template-columns: minmax(0, 1fr); }
-  .h1 { font-size: clamp(54px, 11vw, 96px); }
+  .h1 { font-size: clamp(40px, min(14.4vw, 18vh), 96px); }
   .net-wrap { max-width: 520px; width: 100%; justify-self: center; }
   .fold { --cam: .64; }
   .stage { height: 440px; }
-  .pin .fold-stick { align-content: stretch; padding: 76px 0 16px; }
+  .pin .fold-stick { align-content: stretch; min-height: 0; padding: 76px 0 16px; }
   .pin .fold-grid { height: 100%; grid-template-rows: auto minmax(0, 1fr); gap: 4px; }
   .pin .fold-copy { gap: 10px; }
   .pin .fold-copy .h2 { font-size: clamp(30px, 8vw, 44px); }
@@ -441,7 +442,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .pin .fold[data-step="1"] .step:nth-child(2),
   .pin .fold[data-step="2"] .step:nth-child(3),
   .pin .fold[data-step="3"] .step:nth-child(4) { opacity: 1; transform: none; }
-  .pin .stage { height: 100%; min-height: 280px; }
+  .pin .stage { height: 100%; min-height: 200px; }
   .fan { height: 380px; }
   .sw { width: 170px; height: 244px; margin-left: -85px; grid-template-columns: 34px minmax(0, 1fr); transform: rotate(calc((var(--i) - 4) * 5.5deg)); }
   .fan.is-open .sw { transform: rotate(calc((var(--i) - 4) * 7.5deg)); }
@@ -450,6 +451,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 @media (max-width: 560px) {
   .fold { --cam: .56; }
+  .eyebrow { font-size: 10.5px; gap: 10px; }
   .spec .col-stock, .spec .col-tag { display: none; }
   .spec thead th:nth-child(4) { text-align: left; }
   .spec tbody th { font-size: 16px; }
@@ -460,6 +462,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .sw-meta span { display: none; }
   .fan.is-open .sw { transform: rotate(calc((var(--i) - 4) * 5deg)); }
   .strip { flex-direction: column; }
+}
+@media (max-width: 380px) {
+  .fold { --cam: .5; }
+  .eyebrow { font-size: 9.5px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
