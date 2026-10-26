@@ -43,7 +43,7 @@ favicon.svg, favicon-48.png, apple-touch-icon.png
 
 - **Copy and products:** edit `index.html` directly. The spec sheet is a plain `<table>`; each row's `data-fam` (`pouches`, `bags`, `labels`, `boxes`) drives the filter buttons.
 - **Colours and fonts:** the `:root` tokens at the top of `assets/css/site.css`.
-- **Quote form destination:** `WHATSAPP_NUMBER` at the top of `assets/js/site.js`. The form opens WhatsApp with the visitor's details prefilled; it has no server.
+- **Quote form:** settings at the top of `assets/js/site.js`. Visitors choose **Email the docket**, which posts in the background through [FormSubmit](https://formsubmit.co) to `QUOTE_EMAIL` (the visitor's email, if given, becomes the Reply-To), or **WhatsApp instead**, which opens a prefilled chat to `WHATSAPP_NUMBER`. A hidden honeypot field filters out bots. If email delivery fails, the form offers WhatsApp or a phone call.
 
 ## Motion and accessibility
 
@@ -62,6 +62,7 @@ Without JavaScript, or with *reduce motion* switched on, every section renders i
 ## Before launch
 
 - [ ] Confirm **+91 70303 63555** is on WhatsApp (the quote form sends there). Otherwise change `WHATSAPP_NUMBER` or swap the form for an email or form service.
-- [ ] Add a business **email address** if there is one (none was in the brochure).
+- [ ] **Activate email delivery (one time):** submit the live form once. FormSubmit emails an *Activate Form* link to shetekunal22@gmail.com (check Spam). Click it. Until then, email submissions are not delivered, though WhatsApp still works.
+- [ ] After activating, FormSubmit sends a random-string alias for the address. Replace the address in `QUOTE_EMAIL` with it so the Gmail address isn't visible in the page source.
 - [ ] Replace the brochure renders with **real product photography**. Current images top out at 1376 px wide and look soft on large retina screens.
 - [ ] The logo (`assets/img/logo.svg`) was traced to vector from the supplied 2000 px image. If the original artwork file (AI / EPS / PDF / SVG) exists, swap it in for perfect fidelity.

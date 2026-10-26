@@ -3,8 +3,15 @@
 (() => {
   'use strict';
 
-  // Where quote requests go. WhatsApp number in international format, digits only.
+  // Where quote requests go.
+  // WhatsApp: international format, digits only.
   const WHATSAPP_NUMBER = '917030363555';
+  // Email: delivered by FormSubmit (formsubmit.co, free, no server needed). The first submission sends an
+  // activation link to this inbox; click it once. FormSubmit then emails a random-string alias: put it in
+  // place of the address below to keep the address out of the page source.
+  const QUOTE_EMAIL = 'shetekunal22@gmail.com';
+  const QUOTE_ENDPOINT = `https://formsubmit.co/ajax/${QUOTE_EMAIL}`;
+  const PHONE_DISPLAY = '+91 70303 63555';
 
   const html = document.documentElement;
   const motion = html.classList.contains('motion');
@@ -221,42 +228,116 @@
     });
   }
 
-  /* ---------- quote docket → WhatsApp ---------- */
+  /* ---------- quote docket → email (FormSubmit) or WhatsApp ---------- */
   const form = $('[data-quote]');
   if (form) {
     const note = $('[data-form-note]', form);
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
+    const emailBtn = $('[data-send-email]', form);
+    const emailLabel = $('[data-label]', emailBtn);
+    const waBtn = $('[data-send-whatsapp]', form);
+    const stampDate = $('[data-stamp-date]', form);
+    const setNote = (text, kind) => {
+      note.textContent = text;
+      note.classList.toggle('is-error', kind === 'error');
+      note.classList.toggle('is-ok', kind === 'ok');
+    };
+
+    // Returns the details, or null after flagging what is missing.
+    const collect = () => {
       const data = new FormData(form);
-      const name = String(data.get('name') || '').trim();
-      const phone = String(data.get('phone') || '').trim();
-      const missing = [];
-      [['name', name], ['phone', phone]].forEach(([field, value]) => {
-        const input = form.elements[field];
-        input.setAttribute('aria-invalid', String(!value));
-        if (!value) missing.push(input);
+      const v = (key) => String(data.get(key) || '').trim();
+      const d = { name: v('name'), phone: v('phone'), email: v('email'), family: v('family') || '-', quantity: v('quantity'), notes: v('notes'), honey: v('_honey') };
+      const bad = [];
+      [['name', !d.name], ['phone', !d.phone], ['email', d.email && !form.elements.email.checkValidity()]].forEach(([field, invalid]) => {
+        form.elements[field].setAttribute('aria-invalid', String(Boolean(invalid)));
+        if (invalid) bad.push(form.elements[field]);
       });
-      if (missing.length) {
-        note.textContent = 'Please add your name and phone number.';
-        note.classList.add('is-error');
-        missing[0].focus();
-        return;
+      if (bad.length) {
+        setNote(bad[0].name === 'email' ? 'That email address doesn’t look right.' : 'Please add your name and phone number.', 'error');
+        bad[0].focus();
+        return null;
       }
-      note.classList.remove('is-error');
+      return d;
+    };
+
+    const busy = (on) => {
+      form.classList.toggle('is-sending', on);
+      [emailBtn, waBtn].forEach((b) => { b.disabled = on; });
+      emailBtn.setAttribute('aria-busy', String(on));
+      emailLabel.textContent = on ? 'Sending…' : 'Email the docket';
+    };
+
+    form.addEventListener('input', () => form.classList.remove('is-sent'));
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const d = collect();
+      if (!d) return;
+      busy(true);
+      setNote('Sending your docket…');
+      const done = () => {
+        form.reset();
+        if (stampDate) stampDate.textContent = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+        form.classList.remove('is-sent');
+        void form.offsetWidth;
+        form.classList.add('is-sent');
+        setNote(`Thanks, ${d.name.split(' ')[0]}. Your docket is with SSV Print Pack — expect a reply on ${d.phone}${d.email ? ' or by email' : ''}.`, 'ok');
+      };
+      // Bots fill the hidden field; let them think it worked.
+      if (d.honey) { busy(false); done(); return; }
+      const payload = {
+        _subject: `Quote request: ${d.family} — ${d.name}`,
+        _template: 'table',
+        _captcha: 'false',
+        Name: d.name,
+        Phone: d.phone,
+        Packaging: d.family,
+        'Quantity & size': d.quantity || '-',
+        Notes: d.notes || '-',
+        'Sent from': window.location.href
+      };
+      if (d.email) payload.email = d.email; // FormSubmit uses this as the Reply-To address
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 15000);
+      try {
+        const res = await fetch(QUOTE_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(payload),
+          signal: ctrl.signal
+        });
+        const out = await res.json().catch(() => ({}));
+        if (!res.ok || String(out.success) !== 'true') throw new Error(out.message || `HTTP ${res.status}`);
+        done();
+      } catch (err) {
+        const why = err.name === 'AbortError' ? 'the connection timed out.'
+          : err.name === 'TypeError' ? 'the connection failed.'
+          : (err.message || 'something went wrong.').replace(/([^.!?])$/, '$1.');
+        setNote(`Couldn’t send by email: ${why} Use “WhatsApp instead” or call ${PHONE_DISPLAY}.`, 'error');
+      } finally {
+        clearTimeout(timer);
+        busy(false);
+      }
+    });
+
+    waBtn.addEventListener('click', () => {
+      const d = collect();
+      if (!d) return;
       const lines = [
         'Hello SSV Print Pack, I would like a quote.',
         '',
-        `Name: ${name}`,
-        `Phone: ${phone}`,
-        `Packaging: ${data.get('family') || '-'}`,
-        `Quantity & size: ${String(data.get('quantity') || '').trim() || '-'}`,
-        `Notes: ${String(data.get('notes') || '').trim() || '-'}`
-      ];
+        `Name: ${d.name}`,
+        `Phone: ${d.phone}`,
+        d.email ? `Email: ${d.email}` : null,
+        `Packaging: ${d.family}`,
+        `Quantity & size: ${d.quantity || '-'}`,
+        `Notes: ${d.notes || '-'}`
+      ].filter((l) => l !== null);
       const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`;
       const win = window.open(url, '_blank');
       if (win) {
         win.opener = null;
-        note.textContent = 'WhatsApp opened in a new tab. Send the message there to finish.';
+        setNote('WhatsApp opened in a new tab. Send the message there to finish.', 'ok');
       } else {
         // Pop-up blocked: continue in this tab instead.
         window.location.href = url;
