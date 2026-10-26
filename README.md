@@ -21,7 +21,7 @@ Any static host works (GitHub Pages, Netlify, Cloudflare Pages, Vercel).
 
 **Live at:** https://ssvprintpack.com (GitHub Pages, served from the `gh-pages` branch; the `CNAME` file sets the custom domain).
 
-DNS at Hostinger: four `A` records for `@` → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`; `www` follows the main domain.
+DNS at Hostinger: `A` records for `@` → GitHub Pages (`185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`) and a `CNAME` for `www` → `atharvad999.github.io`. HTTPS is enforced in Settings → Pages.
 
 To publish changes, push `main` to that branch with `git push origin main:gh-pages`. Or, simpler: in Settings → Pages, switch the source to `main` / root, after which every push to `main` deploys and `gh-pages` can be deleted. The `.nojekyll` file is already in place.
 
@@ -63,6 +63,5 @@ Without JavaScript, or with *reduce motion* switched on, every section renders i
 
 - [ ] Confirm **+91 70303 63555** is on WhatsApp (the quote form sends there). Otherwise change `WHATSAPP_NUMBER` or swap the form for an email or form service.
 - [ ] Add a business **email address** if there is one (none was in the brochure).
-- [ ] In GitHub → Settings → Pages, tick **Enforce HTTPS** once the certificate for ssvprintpack.com is issued.
 - [ ] Replace the brochure renders with **real product photography**. Current images top out at 1376 px wide and look soft on large retina screens.
 - [ ] The logo (`assets/img/logo.svg`) was traced to vector from the supplied 2000 px image. If the original artwork file (AI / EPS / PDF / SVG) exists, swap it in for perfect fidelity.
