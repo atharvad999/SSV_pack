@@ -19,7 +19,9 @@ Opening `index.html` straight from disk also works, but a server is closer to pr
 
 Any static host works (GitHub Pages, Netlify, Cloudflare Pages, Vercel).
 
-**GitHub Pages:** Settings → Pages → *Deploy from a branch* → `main` / root. The `.nojekyll` file is already in place.
+**Live now:** https://atharvad999.github.io/SSV_pack/ (GitHub Pages, served from the `gh-pages` branch).
+
+To publish changes, push `main` to that branch with `git push origin main:gh-pages`. Or, simpler: in Settings → Pages, switch the source to `main` / root, after which every push to `main` deploys and `gh-pages` can be deleted. The `.nojekyll` file is already in place.
 
 ## What's where
 
@@ -59,6 +61,6 @@ Without JavaScript, or with *reduce motion* switched on, every section renders i
 
 - [ ] Confirm **+91 70303 63555** is on WhatsApp (the quote form sends there). Otherwise change `WHATSAPP_NUMBER` or swap the form for an email or form service.
 - [ ] Add a business **email address** if there is one (none was in the brochure).
-- [ ] Once there is a domain, make the `og:image` URL in `index.html` absolute (`https://…/og-image.jpg`) so link previews work, and add a `<link rel="canonical">`.
+- [ ] If the site moves to its own domain, update the canonical, `og:url` and `og:image` URLs at the top of `index.html` (they point at the GitHub Pages address today).
 - [ ] Replace the brochure renders with **real product photography**. Current images top out at 1376 px wide and look soft on large retina screens.
 - [ ] Get the **logo as a vector** (SVG). The header currently sets "SSV PRINT PACK" in type.
