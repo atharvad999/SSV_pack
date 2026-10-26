@@ -32,9 +32,9 @@ assets/css/site.css     all styles (tokens at the top)
 assets/js/site.js       motion, filters, menu, quote form
 assets/vendor/lenis.min.js   smooth scrolling (Lenis 1.3.26, MIT)
 assets/fonts/           self-hosted Archivo + Martian Mono (variable, woff2)
-assets/img/             photos in AVIF / WebP / JPEG at two widths, plus paper textures
+assets/img/             logo (SVG + PNG), photos in AVIF / WebP / JPEG at two widths, paper textures
 og-image.jpg            social preview image (1200×630)
-favicon.svg
+favicon.svg, favicon-48.png, apple-touch-icon.png
 ```
 
 ## Editing
@@ -63,4 +63,4 @@ Without JavaScript, or with *reduce motion* switched on, every section renders i
 - [ ] Add a business **email address** if there is one (none was in the brochure).
 - [ ] If the site moves to its own domain, update the canonical, `og:url` and `og:image` URLs at the top of `index.html` (they point at the GitHub Pages address today).
 - [ ] Replace the brochure renders with **real product photography**. Current images top out at 1376 px wide and look soft on large retina screens.
-- [ ] Get the **logo as a vector** (SVG). The header currently sets "SSV PRINT PACK" in type.
+- [ ] The logo (`assets/img/logo.svg`) was traced to vector from the supplied 2000 px image. If the original artwork file (AI / EPS / PDF / SVG) exists, swap it in for perfect fidelity.
