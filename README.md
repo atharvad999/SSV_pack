@@ -43,6 +43,7 @@ favicon.svg, favicon-48.png, apple-touch-icon.png
 
 - **Copy and products:** edit `index.html` directly. The spec sheet is a plain `<table>`; each row's `data-fam` (`pouches`, `bags`, `labels`, `boxes`) drives the filter buttons.
 - **Colours and fonts:** the `:root` tokens at the top of `assets/css/site.css`.
+- **Factory location:** the map at the bottom of the contact section is a Google Maps embed centred on 17.979812, 73.894937 (Plus code 7J9MXVHV+WX). It links to the business listing https://maps.app.goo.gl/EcNxVTeJdNXpfmDH7. Coordinates also appear in the structured data in `<head>`.
 - **Quote form:** settings at the top of `assets/js/site.js`. Visitors choose **Email the docket**, which posts in the background through [FormSubmit](https://formsubmit.co) to `QUOTE_EMAIL` (the visitor's email, if given, becomes the Reply-To), or **WhatsApp instead**, which opens a prefilled chat to `WHATSAPP_NUMBER`. A hidden honeypot field filters out bots. If email delivery fails, the form offers WhatsApp or a phone call.
 
 ## Motion and accessibility
